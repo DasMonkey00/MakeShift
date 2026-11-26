@@ -1,0 +1,1 @@
+# HandAlignPro grip offsets: name  pos(x y z)  rotation quaternion(x y z w), from the tracked controller, right hand

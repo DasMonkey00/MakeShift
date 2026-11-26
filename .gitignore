@@ -1,0 +1,56 @@
+# Unity generated folders (regenerated on open)
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# Generated project files (Unity regenerates these)
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Visual Studio / Rider / IDE
+.vs/
+.vsconfig.local
+.idea/
+.vscode/
+*.tmp
+*.csproj.user
+
+# Build outputs and logs
+*.apk
+*.aab
+*.unitypackage
+*.log
+UpgradeLog.htm
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local Claude settings (keep shared rules in .claude/rules)
+.claude/settings.local.json
+.utmp/
+
+# Crash / diagnostics
+crashlytics-build.properties
+sysinfo.txt
