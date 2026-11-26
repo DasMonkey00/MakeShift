@@ -1,55 +1,42 @@
-# Unity generated folders (regenerated on open)
-[Ll]ibrary/
-[Tt]emp/
-[Oo]bj/
-[Bb]uild/
-[Bb]uilds/
-[Ll]ogs/
-[Uu]ser[Ss]ettings/
-[Mm]emoryCaptures/
-[Rr]ecordings/
+# Unity generated folders at project root (regenerated on open)
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
 
-# Generated project files (Unity regenerates these)
-*.csproj
-*.unityproj
-*.sln
-*.suo
-*.user
-*.userprefs
-*.pidb
-*.booproj
-*.svd
-*.pdb
-*.mdb
-*.opendb
-*.VC.db
-*.pidb.meta
-*.pdb.meta
-*.mdb.meta
+# Generated project files at root (Unity regenerates these)
+/*.csproj
+/*.unityproj
+/*.sln
+/*.suo
+/*.user
+/*.userprefs
 
 # Visual Studio / Rider / IDE
-.vs/
-.vsconfig.local
-.idea/
-.vscode/
-*.tmp
-*.csproj.user
+/.vs/
+/.vsconfig.local
+/.idea/
+/.vscode/
 
-# Build outputs and logs
-*.apk
-*.aab
-*.unitypackage
-*.log
-UpgradeLog.htm
+# Build outputs and logs at root
+/*.apk
+/*.aab
+/*.log
+/UpgradeLog.htm
+/.utmp/
 
 # OS
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Local Claude settings (keep shared rules in .claude/rules)
+# Local Claude settings (shared rules in .claude/rules are tracked)
 .claude/settings.local.json
-.utmp/
 
 # Crash / diagnostics
 crashlytics-build.properties
