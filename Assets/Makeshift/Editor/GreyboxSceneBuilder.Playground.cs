@@ -238,7 +238,6 @@ namespace Makeshift.EditorTools
 
             suites.Add(host.AddComponent<AuthoritySmokeTest>());
 
-            RestyleSceneMaterials();
             AddEnvironment(world, cycle, sunGo, floor);
 
             if (player != null) AddWristMenu(player, world, cycle, raids, survivor, campfire, sunGo);
@@ -274,7 +273,6 @@ namespace Makeshift.EditorTools
             SetRef(menu, "rightHand", ahp.handRight);
             SetRef(menu, "head", player.GetComponentInChildren<Camera>(true));
             SetRef(menu, "cycle", cycle);
-            SetRef(menu, "timeOfDay", world.GetComponent<Makeshift.Rendering.TimeOfDaySky>());
             SetRef(menu, "survivor", survivor);
             SetRef(menu, "raids", raids);
             SetRef(menu, "campfire", campfire);
@@ -307,13 +305,13 @@ namespace Makeshift.EditorTools
             return go.transform;
         }
 
-        const string LooksmithDir = "Assets/PaleFernStudio/Looksmith/";
+        const string PackDir = "Assets/Toon Fantasy Nature/";
 
-        /// <summary>Ground texture, flat grass clumps, and a daytime sky with clouds driven by the world clock.</summary>
+        /// <summary>Ground texture, flat grass clumps and the daytime sky.</summary>
         static void AddEnvironment(GameObject world, DayNightCycle cycle, GameObject sunGo, GameObject floor)
         {
             // ---------- Ground ----------
-            var groundTex = AssetDatabase.LoadAssetAtPath<Texture2D>(LooksmithDir + "Samples/Demo/Terrain/Terrain_Grass.png");
+            var groundTex = AssetDatabase.LoadAssetAtPath<Texture2D>(PackDir + "Terrain/TFF_Terrain_Grass_1A_D.tif");
             if (floor != null && groundTex != null)
             {
                 var fm = floor.GetComponent<Renderer>().sharedMaterial;
@@ -327,74 +325,27 @@ namespace Makeshift.EditorTools
             }
 
             // ---------- Grass ----------
-            var grassPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(LooksmithDir + "Samples/Demo/Prefabs/Grass1.prefab");
-            if (grassPrefab != null)
+            var patch = AssetDatabase.LoadAssetAtPath<GameObject>(PackDir + "Prefabs/Vegetation/Plants/TFF_Grass_Patch_01A.prefab");
+            var grassMaterial = AssetDatabase.LoadAssetAtPath<Material>(
+                "Assets/Makeshift/ToonNature/TFF_Grass_Patch_01A Wind.mat");
+            var lods = patch != null ? patch.GetComponentInChildren<LODGroup>() : null;
+            if (lods != null && grassMaterial != null)
             {
-                var mf = grassPrefab.GetComponentInChildren<MeshFilter>();
-                var mr = grassPrefab.GetComponentInChildren<MeshRenderer>();
-                string meshPath = AssetDatabase.GetAssetPath(mf.sharedMesh);
-                if (AssetImporter.GetAtPath(meshPath) is ModelImporter mi && !mi.isReadable)
-                {
-                    mi.isReadable = true; // needed to merge clumps into chunk meshes at start
-                    mi.SaveAndReimport();
-                }
+                // The patch's second model: enough blades for a flat training ground, at under half the triangles.
+                var mesh = lods.GetLODs()[1].renderers[0].GetComponent<MeshFilter>().sharedMesh;
                 var field = new GameObject("GrassField").AddComponent<Makeshift.Rendering.GrassField>();
-                SetRef(field, "clump", AssetDatabase.LoadAssetAtPath<Mesh>(meshPath) ?? mf.sharedMesh);
-                SetRef(field, "material", mr.sharedMaterial);
+                SetRef(field, "clump", mesh);
+                SetRef(field, "material", grassMaterial);
             }
-            else Debug.LogWarning("[PLAYGROUND] Grass1 prefab not found; skipping grass");
+            else Debug.LogWarning("[PLAYGROUND] grass patch or its material not found; skipping grass");
 
             // ---------- Sky ----------
-            var skyMat = AssetDatabase.LoadAssetAtPath<Material>(LooksmithDir + "Sky/Looksmith Sky.mat");
-            var night = AssetDatabase.LoadAssetAtPath<PaleFernStudio.Looksmith.LooksmithSkyPreset>(LooksmithDir + "Sky/Presets/Cozy Night Sky.asset");
-            var golden = AssetDatabase.LoadAssetAtPath<PaleFernStudio.Looksmith.LooksmithSkyPreset>(LooksmithDir + "Sky/Presets/Golden Hour Sky.asset");
-            var day = AssetDatabase.LoadAssetAtPath<PaleFernStudio.Looksmith.LooksmithSkyPreset>(LooksmithDir + "Sky/Presets/Morning Sky.asset");
-            if (skyMat == null || night == null || golden == null || day == null)
-            {
-                Debug.LogWarning("[PLAYGROUND] Looksmith sky assets not found; skipping the sky");
-                return;
-            }
-            var skyGo = new GameObject("Sky");
-            var sky = skyGo.AddComponent<PaleFernStudio.Looksmith.LooksmithSky>();
-            sky.skyMaterial = skyMat;
-            sky.preset = day;
-            if (sunGo != null) sky.sun = sunGo.GetComponent<Light>();
-            sky.applyReflections = false; // rebuilding the reflection cubemap every few frames is not Quest-friendly
-            EditorUtility.SetDirty(sky);
-
-            // The sky now moves the sun; the survival clock only keeps time.
-            SetRef(cycle, "sun", null);
-
-            var tod = world.AddComponent<Makeshift.Rendering.TimeOfDaySky>();
-            SetRef(tod, "sky", sky);
-            SetRef(tod, "cycle", cycle);
-            SetRef(tod, "night", night);
-            SetRef(tod, "goldenHour", golden);
-            SetRef(tod, "day", day);
+            var sky = AssetDatabase.LoadAssetAtPath<Material>(PackDir + "Skyboxes/TFF_Skybox_Day_01A.mat");
+            if (sky != null) RenderSettings.skybox = sky;
+            else Debug.LogWarning("[PLAYGROUND] sky material not found; keeping the default sky");
+            if (sunGo != null) RenderSettings.sun = sunGo.GetComponent<Light>();
         }
 
-        /// <summary>Props the template builds get URP Lit; move them to Looksmith Lit so the styles reach them. The player rig stays as it is.</summary>
-        static void RestyleSceneMaterials()
-        {
-            if (!RenderSetup.UseLooksmithLit) return; // Looksmith Lit is parked (breaks Android builds); keep URP Lit
-            var styled = RenderSetup.StyledShader();
-            if (styled == null) return;
-            var player = GameObject.Find("XRPlayer");
-            int n = 0;
-            foreach (var r in Object.FindObjectsByType<MeshRenderer>(FindObjectsInactive.Include))
-            {
-                if (player != null && r.transform.IsChildOf(player.transform)) continue;
-                foreach (var m in r.sharedMaterials)
-                {
-                    if (m == null || m.shader == null || m.shader.name != "Universal Render Pipeline/Lit") continue;
-                    Color c = m.HasProperty("_BaseColor") ? m.GetColor("_BaseColor") : Color.white;
-                    m.shader = styled;
-                    TintMaterial(m, c);
-                    n++;
-                }
-            }
-            Debug.Log($"[PLAYGROUND] restyled {n} scene materials to Looksmith Lit");
-        }
 
         // ---------- playground helpers ----------
 

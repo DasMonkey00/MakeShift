@@ -194,7 +194,9 @@ namespace Autohand {
             for(int i = 0; i < overlapCount; i++) {
                 col = handHighlightNonAlloc[i];
 
-                if(!(col is MeshCollider) || (col as MeshCollider).convex == true) {
+                // Makeshift: ClosestPoint only works on these shapes. The terrain's collider is not one of them and
+                // logged an error every time a hand reached for something lying on the ground.
+                if(col is BoxCollider || col is SphereCollider || col is CapsuleCollider || (col is MeshCollider mesh && mesh.convex)) {
                     Vector3 closestPoint = col.ClosestPoint(hand.palmTransform.transform.position);
                     ray.direction = closestPoint -hand.palmTransform.position;
                 }

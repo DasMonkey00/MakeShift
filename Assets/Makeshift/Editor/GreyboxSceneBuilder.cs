@@ -253,7 +253,7 @@ namespace Makeshift.EditorTools
         {
             Directory.CreateDirectory("Assets/Makeshift/Materials");
             string path = $"Assets/Makeshift/Materials/{name}.mat";
-            // Looksmith Lit when imported (it matches URP Lit's property names), else URP Lit.
+            // URP Lit.
             var shader = RenderSetup.StyledShader() ?? Shader.Find("Standard");
             var existing = AssetDatabase.LoadAssetAtPath<Material>(path);
             if (existing != null)

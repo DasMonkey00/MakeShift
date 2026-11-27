@@ -55,7 +55,7 @@ namespace Makeshift.Rendering
             line.numCapVertices = 2;
             if (line.sharedMaterial == null)
             {
-                // URP Unlit keeps the rope cheap and avoids the Looksmith shader that is parked.
+                // URP Unlit keeps the rope cheap.
                 var shader = Shader.Find("Universal Render Pipeline/Unlit") ?? Shader.Find("Sprites/Default");
                 var mat = new Material(shader);
                 mat.color = color;

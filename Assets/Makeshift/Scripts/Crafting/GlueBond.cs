@@ -26,6 +26,7 @@ namespace Makeshift.Crafting
         private float massBefore;
         private Trait addedTraits;
         private bool breaking;
+        private bool dropping;           // the break also knocks the weapon out of the hand
 
         public bool Lashed { get; private set; }
         public int Hits { get; private set; }
@@ -89,6 +90,14 @@ namespace Makeshift.Crafting
             else PlaceholderSfx.Play(SfxKind.Crack, JointWorld, 0.6f);
         }
 
+        /// <summary>A blow unlashed glue cannot take: it gives way at once and the weapon falls from the hand.</summary>
+        public void Shatter()
+        {
+            if (Lashed) return;
+            breaking = true;
+            dropping = true;
+        }
+
         private void LateUpdate()
         {
             if (part == null) return;
@@ -108,6 +117,11 @@ namespace Makeshift.Crafting
         private void Break()
         {
             breaking = false;
+            if (dropping)
+            {
+                HandCheck.Release(body);
+                body.linearVelocity = Vector3.ClampMagnitude(body.linearVelocity, 1f); // it drops, it is not thrown
+            }
             Vector3 at = part != null ? part.position : JointWorld;
             Quaternion rot = part != null ? part.rotation : transform.rotation;
             Vector3 velocity = body.GetPointVelocity(at);

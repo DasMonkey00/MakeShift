@@ -34,6 +34,7 @@ namespace Makeshift.Crafting
         private const int FreePoints = 14;       // points in the swinging end
         private const float StepDegrees = 15f;
         private const float BandHalfWidth = 0.025f;
+        private const float MaxFromJoint = 0.015f; // furthest the middle of the wrap sits from where the pieces meet
 
         public int BondCount { get; private set; }
         public GlueBond Target => target;
@@ -160,6 +161,7 @@ namespace Makeshift.Crafting
             Vector3 b = EndPoint();
             for (int i = 0; i < FreePoints; i++) free[i] = freeLast[i] = Vector3.Lerp(a, b, i / (FreePoints - 1f));
             PlaceholderSfx.Play(SfxKind.Glop, bond.JointWorld, 0.6f);
+            Debug.Log($"[Makeshift] vine attached to {keeper.name}");
         }
 
         private void Detach()
@@ -207,14 +209,16 @@ namespace Makeshift.Crafting
                 }
             }
             // The wrap sits where the joint is along the stick, pulled a little onto the stick.
-            float along = Vector3.Dot(joint - middle, axis);
-            along -= Mathf.Sign(along) * Mathf.Min(0.025f, Mathf.Abs(along));
+            float atJoint = Vector3.Dot(joint - middle, axis);
+            float along = atJoint - Mathf.Sign(atJoint) * Mathf.Min(0.025f, Mathf.Abs(atJoint));
             // A big head covers the joint: lash the stick just behind it, where the rope can pull tight.
             if (HeadEdge(middle, Mathf.Sign(along), out float edge))
             {
                 float behind = edge - Mathf.Sign(along) * BandHalfWidth * 1.2f;
                 if (Mathf.Abs(behind) < Mathf.Abs(along)) along = behind;
             }
+            // But never far from the joint: the finished band has to look like it is what holds the two together.
+            along = Mathf.MoveTowards(atJoint, along, MaxFromJoint);
             centre = middle + axis * along;
             side = Vector3.Cross(axis, Mathf.Abs(axis.y) < 0.9f ? Vector3.up : Vector3.forward).normalized;
             up = Vector3.Cross(axis, side).normalized;
@@ -395,16 +399,13 @@ namespace Makeshift.Crafting
             var go = new GameObject("Coil");
             go.transform.SetParent(parent, false);
             if (ringMesh == null) return go;
-            for (int i = 0; i < 2; i++)
-            {
-                var ring = new GameObject("Loop" + i);
-                ring.transform.SetParent(go.transform, false);
-                ring.transform.localRotation = Quaternion.Euler(70f + i * 25f, i * 60f, 0f);
-                ring.AddComponent<MeshFilter>().sharedMesh = ringMesh;
-                var mr = ring.AddComponent<MeshRenderer>();
-                mr.sharedMaterial = ringMaterial;
-                mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            }
+            var loops = new GameObject("Loops");
+            loops.transform.SetParent(go.transform, false);
+            loops.transform.localRotation = Quaternion.Euler(75f, 0f, 0f); // hangs from the hand, near upright
+            loops.AddComponent<MeshFilter>().sharedMesh = ringMesh;
+            var mr = loops.AddComponent<MeshRenderer>();
+            mr.sharedMaterial = ringMaterial;
+            mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             return go;
         }
 
@@ -434,8 +435,8 @@ namespace Makeshift.Crafting
                 for (int s = 0; s < sides; s++)
                 {
                     int a = i * sides + s, b = i * sides + (s + 1) % sides, c = a + sides, d = b + sides;
-                    triangles[k++] = a; triangles[k++] = b; triangles[k++] = c;
-                    triangles[k++] = b; triangles[k++] = d; triangles[k++] = c;
+                    triangles[k++] = a; triangles[k++] = c; triangles[k++] = b;
+                    triangles[k++] = b; triangles[k++] = c; triangles[k++] = d;
                 }
             var mesh = new Mesh { name = "Lashing", vertices = vertices, normals = normals, triangles = triangles };
             mesh.RecalculateBounds();

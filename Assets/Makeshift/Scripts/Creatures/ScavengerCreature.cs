@@ -1,5 +1,6 @@
 using System;
 using Makeshift.Combat;
+using Makeshift.Engine;
 using UnityEngine;
 
 namespace Makeshift.Creatures
@@ -43,6 +44,7 @@ namespace Makeshift.Creatures
         private float pickedAt;
         private Vector3 home, wanderTarget;
         private float modeTimer;
+        private float aiAccumulated;
 
         /// <summary>Own physics layer, so raiders never shove players (see SetupCollisions).</summary>
         public const string CreatureLayer = "Creature";
@@ -99,7 +101,8 @@ namespace Makeshift.Creatures
 
         private void Update()
         {
-            float dt = Time.deltaTime;
+            // Time slicing: near a player it runs every frame; far away less often, each step carrying the time skipped.
+            if (!AiScheduler.Due(transform.position, ref aiAccumulated, Time.deltaTime, out float dt)) return;
             modeTimer -= dt;
 
             // A player can pull the loot out of its mouth.

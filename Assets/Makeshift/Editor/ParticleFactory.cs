@@ -122,6 +122,76 @@ namespace Makeshift.EditorTools
             return m;
         }
 
+        /// <summary>
+        /// A loosely wound coil of vine, drawn as the same round rope as a finished lashing: a few uneven turns with
+        /// both ends trailing out. Rebuilt in place each time, so tuning it shows after the next scene build.
+        /// </summary>
+        public static Mesh VineCoil(float thickness = 0.0072f)
+        {
+            Directory.CreateDirectory("Assets/Makeshift/Meshes");
+            const string path = "Assets/Makeshift/Meshes/VineCoil.asset";
+            const float turns = 4.5f;
+            const int steps = 120, sides = 6;
+
+            Vector3 At(float t)
+            {
+                float a = t * turns * Mathf.PI * 2f;
+                // The two ends peel away from the loops.
+                float tail = Mathf.Pow(Mathf.Clamp01((0.07f - t) / 0.07f), 2f) + Mathf.Pow(Mathf.Clamp01((t - 0.93f) / 0.07f), 2f);
+                float radius = 0.066f + 0.011f * Mathf.Sin(a * 0.73f + 1.3f) + 0.035f * tail;
+                float x = Mathf.Cos(a) * radius + 0.009f * Mathf.Sin(a * 0.31f);
+                float z = Mathf.Sin(a) * radius * 0.9f + 0.008f * Mathf.Cos(a * 0.43f);
+                float y = Mathf.Lerp(-0.016f, 0.016f, t) + 0.008f * Mathf.Sin(a * 1.37f + 0.5f);
+                return new Vector3(x, y, z);
+            }
+
+            var verts = new Vector3[(steps + 1) * sides + 2];
+            var normals = new Vector3[verts.Length];
+            var tris = new System.Collections.Generic.List<int>();
+            for (int i = 0; i <= steps; i++)
+            {
+                float t = i / (float)steps;
+                Vector3 forward = (At(Mathf.Min(t + 0.002f, 1f)) - At(Mathf.Max(t - 0.002f, 0f))).normalized;
+                Vector3 right = Vector3.Cross(forward, Mathf.Abs(forward.y) < 0.9f ? Vector3.up : Vector3.right).normalized;
+                Vector3 top = Vector3.Cross(right, forward);
+                for (int s = 0; s < sides; s++)
+                {
+                    float a = s * Mathf.PI * 2f / sides;
+                    Vector3 n = right * Mathf.Cos(a) + top * Mathf.Sin(a);
+                    verts[i * sides + s] = At(t) + n * thickness;
+                    normals[i * sides + s] = n;
+                }
+            }
+            for (int i = 0; i < steps; i++)
+                for (int s = 0; s < sides; s++)
+                {
+                    int a = i * sides + s, b = i * sides + (s + 1) % sides, c = a + sides, d = b + sides;
+                    tris.AddRange(new[] { a, c, b, b, c, d });
+                }
+            // Closed ends.
+            int first = verts.Length - 2, last = verts.Length - 1;
+            verts[first] = At(0f); normals[first] = (At(0f) - At(0.002f)).normalized;
+            verts[last] = At(1f); normals[last] = (At(1f) - At(0.998f)).normalized;
+            for (int s = 0; s < sides; s++)
+            {
+                tris.AddRange(new[] { first, s, (s + 1) % sides });
+                tris.AddRange(new[] { last, steps * sides + (s + 1) % sides, steps * sides + s });
+            }
+
+            var mesh = AssetDatabase.LoadAssetAtPath<Mesh>(path);
+            bool isNew = mesh == null;
+            if (isNew) mesh = new Mesh();
+            else mesh.Clear();
+            mesh.name = "VineCoil";
+            mesh.vertices = verts;
+            mesh.normals = normals;
+            mesh.triangles = tris.ToArray();
+            mesh.RecalculateBounds();
+            if (isNew) AssetDatabase.CreateAsset(mesh, path);
+            else EditorUtility.SetDirty(mesh);
+            return mesh;
+        }
+
         public static Mesh Torus(string name, float majorRadius, float tubeRadius, int segments = 16, int sides = 8)
         {
             Directory.CreateDirectory("Assets/Makeshift/Meshes");

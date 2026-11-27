@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6879352985052f48a72584763526949, type: 3}
+  m_Name: BudgetProfile
+  m_EditorClassIdentifier: Makeshift.Engine::Makeshift.Engine.BudgetProfile
+  bubbleOn: 1
+  bubbleRadius: 20
+  rigidbodyCap: 40
+  hysteresis: 3
+  bubbleInterval: 0.25
+  aiTiersOn: 1
+  nearRange: 15
+  midRange: 35
+  midPeriod: 0.1
+  farPeriod: 0.5
+  shadowDistance: 12
+  shadowCascades: 1
+  msaaSamples: 2
+  applyToDesktop: 0
+  terrainPixelError: 5
+  terrainDetailDistance: 35

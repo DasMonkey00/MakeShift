@@ -17,7 +17,6 @@ namespace Makeshift.EditorTools
         const string Dir = "Assets/Makeshift/Rendering";
         public const string QuestAssetPath = Dir + "/Makeshift_URP_Quest.asset";
         public const string PcAssetPath = Dir + "/Makeshift_URP_PC.asset";
-        public const string LooksmithLitPath = "Assets/PaleFernStudio/Looksmith/Shaders/Graphs/Looksmith Lit.shadergraph";
 
         [MenuItem("Makeshift/Setup URP (Quest + PC assets)")]
         public static void SetupMenu() { Setup(); }
@@ -71,7 +70,7 @@ namespace Makeshift.EditorTools
             Set(so, "m_RequireDepthTexture", 0);
             Set(so, "m_RequireOpaqueTexture", 0);
             Set(so, "m_SupportsTerrainHoles", 0);
-            Set(so, "m_SupportsDynamicBatching", quest ? 1 : 0);
+            Set(so, "m_SupportsDynamicBatching", 0); // removed from URP; ticked, it only logs an error
             // Quest-friendly shadows: one hard-edged cascade of the sun, 1024 map, 25 m. No extra-light shadows, no soft.
             Set(so, "m_MainLightShadowsSupported", 1);
             // Quest bumped 1024 -> 2048 (one step up). Needs an on-device check at 90 fps; drop back to 1024 if it costs frames.
@@ -114,22 +113,8 @@ namespace Makeshift.EditorTools
 
         // ---------- materials ----------
 
-        /// <summary>
-        /// Always URP Lit. Looksmith Lit is PARKED: it fails to compile for Android (D3D X8000 internal compiler error on
-        /// every main-light-shadow variant) and breaks the Quest build. See "Looksmith parked" in PHASE1_STATUS.md.
-        /// Flip UseLooksmithLit only after Looksmith ships a fix or is replaced.
-        /// </summary>
-        public static readonly bool UseLooksmithLit = false;
-
-        public static Shader StyledShader()
-        {
-            if (UseLooksmithLit)
-            {
-                var s = AssetDatabase.LoadAssetAtPath<Shader>(LooksmithLitPath);
-                if (s != null) return s;
-            }
-            return Shader.Find("Universal Render Pipeline/Lit");
-        }
+        /// <summary>The shader builders give new surfaces.</summary>
+        public static Shader StyledShader() => Shader.Find("Universal Render Pipeline/Lit");
 
         /// <summary>Moves Standard materials to URP Lit (or the given shader). Returns how many changed.</summary>
         public static int ConvertStandardMaterials(Shader target, string folder = "Assets")
@@ -161,7 +146,7 @@ namespace Makeshift.EditorTools
                     converted++;
                 }
                 else if (!n.StartsWith("Universal Render Pipeline/") && !n.StartsWith("Shader Graphs/") &&
-                         !n.StartsWith("Looksmith") && !n.StartsWith("Sprites/") && !n.StartsWith("UI/") && !n.StartsWith("TextMeshPro/"))
+                         !n.StartsWith("Sprites/") && !n.StartsWith("UI/") && !n.StartsWith("TextMeshPro/"))
                     unknown.Add(n + "  (" + path + ")");
             }
             foreach (var u in unknown) Debug.Log("[SETUP] left alone (custom shader): " + u);

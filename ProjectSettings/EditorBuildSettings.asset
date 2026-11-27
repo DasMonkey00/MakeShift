@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/ToonNature.unity
+    guid: 06403c76f0d052646babdb0bb7102684
+  - enabled: 1
     path: Assets/Scenes/Playground.unity
     guid: e20c04511b4264d4b9e82ae84dcd8867
   m_configObjects:

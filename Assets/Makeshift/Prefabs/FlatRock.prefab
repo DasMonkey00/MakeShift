@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3020900454116440162}
   - component: {fileID: 7166882916675815272}
   - component: {fileID: 3586570892834279243}
+  - component: {fileID: 4008158697835891566}
   m_Layer: 7
   m_Name: FlatRock
   m_TagString: Untagged
@@ -199,6 +200,23 @@ MonoBehaviour:
   sharpMultiplier: 1.5
   heavyMultiplier: 1.25
   perTargetCooldown: 0.45
+--- !u!114 &4008158697835891566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430821249496079379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7f6ffefb2649774b942fe27b0ac7806, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Makeshift.Combat.AxeHead
+  minArmSpeed: 1.8
+  minSwingTravel: 0.3
+  reach: 0.16
+  cooldown: 0.5
+  edgeTolerance: 55
 --- !u!1 &3534577315645385305
 GameObject:
   m_ObjectHideFlags: 0

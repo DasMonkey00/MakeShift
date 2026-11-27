@@ -22,7 +22,7 @@ namespace Makeshift.Survival
             go.transform.SetParent(cam.transform, false);
             go.transform.localPosition = new Vector3(0f, -0.22f, 0.7f);
             text = go.AddComponent<TextMesh>();
-            go.AddComponent<MeshFilter>(); // Looksmith's scan expects every MeshRenderer to have one
+            go.AddComponent<MeshFilter>(); // some scene scans expect every MeshRenderer to have one
             text.characterSize = 0.012f;
             text.fontSize = 48;
             text.anchor = TextAnchor.UpperCenter;

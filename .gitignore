@@ -41,3 +41,7 @@ desktop.ini
 # Crash / diagnostics
 crashlytics-build.properties
 sysinfo.txt
+
+# Toon Fantasy Nature asset pack (1.7 GB, kept out of git; reimport from the Asset Store)
+/Assets/Toon Fantasy Nature/
+/Assets/Toon Fantasy Nature.meta

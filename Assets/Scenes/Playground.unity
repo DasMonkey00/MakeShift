@@ -15,18 +15,18 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
   m_Fog: 0
-  m_FogColor: {r: 0.72156864, g: 0.74509805, b: 0.76862746, a: 1}
+  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.47395134, g: 0.6240338, b: 0.7741163, a: 0.8}
-  m_AmbientEquatorColor: {r: 0.59544665, g: 0.6526209, b: 0.6240338, a: 0.8}
-  m_AmbientGroundColor: {r: 0.33101562, g: 0.3167221, b: 0.25240102, a: 0.8}
+  m_AmbientSkyColor: {r: 0.55, g: 0.6, b: 0.7, a: 1}
+  m_AmbientEquatorColor: {r: 0.4, g: 0.4, b: 0.42, a: 1}
+  m_AmbientGroundColor: {r: 0.25, g: 0.25, b: 0.25, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 1
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: f605fd3c07cd7d94189fdb7a5d9fd3d2, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 9873fbde6fe03504a9da2612241c5d71, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -2768,7 +2768,7 @@ MonoBehaviour:
   rightHand: {fileID: 1636612249}
   head: {fileID: 1636612247}
   cycle: {fileID: 2127014533}
-  timeOfDay: {fileID: 2127014531}
+  timeOfDay: {fileID: 0}
   survivor: {fileID: 70158878}
   raids: {fileID: 2127014532}
   campfire: {fileID: 360329125}
@@ -2780,13 +2780,14 @@ MonoBehaviour:
   - {fileID: 1278560820}
   - {fileID: 2131973542}
   surfaceMaterial: {fileID: 2100000, guid: 3784b234f1fd0d043ae23053512f6810, type: 2}
-  buttonLocalOffset: {x: -0.045, y: 0, z: -0.03}
+  wristOffset: {x: -0.036, y: 0.006, z: -0.072}
   backLocalNormal: {x: -1, y: 0, z: 0}
   lookAtWristDot: 0.5
   buttonPokeDistance: 0.035
-  openDistance: 0.68
-  openDrop: 0.08
-  openScale: 1.2
+  panelDistance: 0.56
+  panelDrop: 0.36
+  panelTilt: 40
+  panelScale: 1
   closeDistance: 1.5
 --- !u!114 &70158875
 MonoBehaviour:
@@ -6315,8 +6316,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 670c7f81a34bfbb479b2f12100b293b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Makeshift.Rendering.GrassField
-  clump: {fileID: 3284317394355905387, guid: bf6f9ff16c76d3141a22248834fe50ed, type: 3}
-  material: {fileID: 2100000, guid: a906845cf51cb834693361e6074e63b6, type: 2}
+  clump: {fileID: 4300002, guid: 30e3a54c12bc780438417c3168041ccc, type: 3}
+  material: {fileID: 2100000, guid: bc8cbbd13d5b6cb429a5bf4c294e6cbe, type: 2}
   halfSize: 28
   chunkSize: 8
   density: 1.2
@@ -17493,69 +17494,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 337340164}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &342142163
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 342142165}
-  - component: {fileID: 342142164}
-  m_Layer: 0
-  m_Name: Sky
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &342142164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 342142163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e20434954ad4a294a81446a88e35afa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: PaleFernStudio.Looksmith.Runtime::PaleFernStudio.Looksmith.LooksmithSky
-  preset: {fileID: 11400000, guid: 6b7e614a9792c004383ae160cdca42b6, type: 2}
-  sun: {fileID: 308393577}
-  skyMaterial: {fileID: 2100000, guid: f605fd3c07cd7d94189fdb7a5d9fd3d2, type: 2}
-  applyAmbient: 1
-  applyFog: 1
-  applyReflections: 0
-  m_Captured: 1
-  m_PrevSkybox: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
-  m_PrevAmbientMode: 1
-  m_PrevAmbientSky: {r: 0.55, g: 0.6, b: 0.7, a: 1}
-  m_PrevAmbientEquator: {r: 0.4, g: 0.4, b: 0.42, a: 1}
-  m_PrevAmbientGround: {r: 0.25, g: 0.25, b: 0.25, a: 1}
-  m_PrevFogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  m_PrevAmbientIntensity: 1
-  m_PrevFogDensity: 0.01
-  m_PrevReflectionIntensity: 1
-  m_PrevFog: 0
-  m_PrevFogMode: 3
-  m_PrevReflectionMode: 0
---- !u!4 &342142165
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 342142163}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &346658576
 GameObject:
   m_ObjectHideFlags: 0
@@ -49137,7 +49075,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: a8494eb925fc4484c952ca440b531688, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2bf41c6a5e818ed49bd421aa8fa96aca, type: 3}
         m_Scale: {x: 30, y: 30}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -49161,7 +49099,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: a8494eb925fc4484c952ca440b531688, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2bf41c6a5e818ed49bd421aa8fa96aca, type: 3}
         m_Scale: {x: 30, y: 30}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -87793,7 +87731,6 @@ GameObject:
   - component: {fileID: 2127014534}
   - component: {fileID: 2127014533}
   - component: {fileID: 2127014532}
-  - component: {fileID: 2127014531}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -87801,27 +87738,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2127014531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2127014530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3ed132391fe6e54aaeeaa98d2ad2e00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Makeshift.Rendering.TimeOfDaySky
-  sky: {fileID: 342142164}
-  cycle: {fileID: 2127014533}
-  night: {fileID: 11400000, guid: 8155ab2a80dc1cc43b05386b8f9b60b1, type: 2}
-  goldenHour: {fileID: 11400000, guid: d5f467a17736c5b45bc57e6efd8e0d92, type: 2}
-  day: {fileID: 11400000, guid: 6b7e614a9792c004383ae160cdca42b6, type: 2}
-  startTime01: 0.45
-  daytimeClouds: 0.8
-  noonElevation: 65
-  hotkeys: 1
 --- !u!114 &2127014532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88700,7 +88616,6 @@ SceneRoots:
   - {fileID: 177689948}
   - {fileID: 1914283615}
   - {fileID: 200801706}
-  - {fileID: 342142165}
   - {fileID: 1927681135}
   - {fileID: 398312770}
   - {fileID: 326209465}

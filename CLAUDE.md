@@ -55,8 +55,8 @@ Never build a feature twice for two platforms.
   We mostly develop and test in Windows and the editor/PC VR preview, which is far faster than a Quest, so never judge
   performance from PC: always keep the Quest 3S limit in mind and verify on device (and make an Android build after any
   rendering or shader asset change). PC gets higher settings from the same content (quality tiers).
-- **Looksmith (stylized shader asset) is parked.** Its Lit shader does not compile for Android and breaks the Quest build.
-  Everything uses URP/Lit for now; it must be removed or replaced. Details and checklist: "Looksmith parked" in PHASE1_STATUS.md.
+- **Looksmith (stylized shader asset) has been removed** (2026-11-27). It is no longer in the project.
+  Everything uses URP/Lit. Do not reintroduce Looksmith or any asset whose Lit shader fails to compile for Android.
 
 ## Netcode costs (for planning)
 

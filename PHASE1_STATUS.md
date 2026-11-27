@@ -136,7 +136,11 @@ body (AutoHandPlayer), eating by mouth trigger, lashing by hand, HUD readability
 - Fixed a flaky smoke check: the stick teleport now sets the Rigidbody position too. "dropped loot is a free object again" also failed once; if it recurs, look at the scavenger recover timing.
 - Smoke: 78/78 pass.
 
-## Looksmith parked: REMOVE / REPLACE (2026-11-25)
+## Looksmith removed (2026-11-27; was parked 2026-11-25)
+
+**Status.** Looksmith has been removed from the project (2026-11-27). Everything uses URP/Lit. The sections below are the history
+of why, and the original plan. The "Still depends on" list and removal checklist describe what had to change; check the current
+code before relying on them.
 
 **Problem.** The Android (Quest) build failed with 28 errors, all one shader error from `Looksmith/Looksmith Lit`:
 `D3D11 Internal Compiler Error: Invalid Bytecode ... relative index ... uninitialized` (12 on GLES3, 16 on Vulkan), on every
@@ -159,7 +163,7 @@ passes are also full-screen cost we cannot afford at 90 fps on Quest 3S (see the
   `RenderSetup`, `RestyleReport`, `GrassField`/`GrassStats` use `Samples/Demo/Grass1`.
 - Scene: Look Volume, `LooksmithSky`, Looksmith grass/foliage meshes in `Playground.unity`.
 
-**Plan.** Do NOT fix Looksmith and do NOT swap in another asset now (Phase 1 is about fun, not look). Revisit the look as a
+**Plan (original, 2026-11-25).** Do NOT fix Looksmith and do NOT swap in another asset now (Phase 1 is about fun, not look). Revisit the look as a
 spike around weeks 5-6, once we have a Quest 3S frame budget: a custom/own toon-ramp URP shader, a Quest-friendly toon asset, or
 plain lighting. Removal checklist when we do: copy the used assets (Grass1 mesh, Terrain_Grass texture) into `Assets/Makeshift`;
 replace the sky and `TimeOfDaySky` with a URP skybox + light rotation; delete `RenderStyleSwitcher`, `TimeOfDaySky`,

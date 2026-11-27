@@ -225,6 +225,7 @@ namespace Makeshift.EditorTools
             Dyn(go, 0.45f);
             go.AddComponent<TraitHolder>().Add(Trait.Heavy | Trait.Sharp);
             go.AddComponent<ImpactDamage>();
+            go.AddComponent<AxeHead>(); // glued to a stick, it cuts trees
             flatRock = PrefabUtility.SaveAsPrefabAsset(go, PrefabDir() + "FlatRock.prefab");
             Object.DestroyImmediate(go);
             return flatRock;
@@ -310,27 +311,17 @@ namespace Makeshift.EditorTools
 
         static GameObject MakeVine(Vector3 pos)
         {
-            var torus = ParticleFactory.Torus("VineTorus", 0.055f, 0.012f, 16, 8);
+            // A loose green coil, in the same rope and colour as the tight lashing it ends up as.
+            var coil = ParticleFactory.VineCoil();
             var go = Root("Vine", pos);
-            Color green = new Color(0.22f, 0.52f, 0.22f);
-            if (Model(go.transform, "vine", 0.55f, 0, Pivot.Center, new Vector3(0, 0, 90), default, true) == null)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    var ring = new GameObject("Coil" + i);
-                    ring.transform.SetParent(go.transform, false);
-                    ring.transform.localPosition = new Vector3(0, i * 0.02f, 0);
-                    ring.transform.localRotation = Quaternion.Euler(i * 6f, i * 50f, 0);
-                    ring.AddComponent<MeshFilter>().sharedMesh = torus;
-                    ring.AddComponent<MeshRenderer>().sharedMaterial = PropMat(green);
-                }
-                Vis(go.transform, "Tail", PrimitiveType.Cylinder, new Vector3(0.07f, 0.03f, 0), new Vector3(0.014f, 0.05f, 0.014f), green, new Vector3(0, 0, 70));
-                SphereCol(go, new Vector3(0, 0.02f, 0), 0.07f);
-            }
-            else CapCol(go, Vector3.zero, 0.03f, 0.55f, 0);
+            var loops = new GameObject("Loops");
+            loops.transform.SetParent(go.transform, false);
+            loops.AddComponent<MeshFilter>().sharedMesh = coil;
+            loops.AddComponent<MeshRenderer>().sharedMaterial = ParticleFactory.LashMaterial();
+            BoxCol(go, coil.bounds.center, coil.bounds.size);
             Dyn(go, 0.05f);
             var binder = go.AddComponent<StickyBinder>();
-            SetRef(binder, "ringMesh", ParticleFactory.Torus("LashTorus", 0.05f, 0.007f, 16, 6));
+            SetRef(binder, "ringMesh", coil);
             SetRef(binder, "ringMaterial", ParticleFactory.LashMaterial());
             go.AddComponent<TraitHolder>().Add(Trait.Sticks);
             return go;
